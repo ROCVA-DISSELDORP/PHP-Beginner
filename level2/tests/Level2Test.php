@@ -1,52 +1,103 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Level 2 – tests voor de opdrachten in `level2/opdrachten`.
+ *
+ * In dit level werken we met if/else, vergelijkingen en booleans,
+ * maar nog steeds zonder eigen functies in de opdrachtbestanden.
+ */
 final class Level2Test extends TestCase
 {
-    public function testIsVolwassen(): void
+    /**
+     * Opdracht 2.1 – Som of verschil
+     *
+     * Het script `opdrachten/opdracht-2.1.php` vraagt om een operator (`+` of `-`)
+     * en daarna twee getallen. Bij `+` telt het de getallen op, bij `-` trekt het af.
+     */
+    public function testOpdracht2_1Optellen(): void
     {
-        requireOpdracht(2, 'IsVolwassen.php');
-        $this->assertFalse(isVolwassen(0));
-        $this->assertFalse(isVolwassen(17));
-        $this->assertTrue(isVolwassen(18));
-        $this->assertTrue(isVolwassen(99));
+        $randomInput = rand(100, 999);
+        $cmd = "echo -e \"+\n$randomInput\n10\n\" | php " . escapeshellarg(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.1.php');
+        $output = shell_exec($cmd);
+        $this->assertStringContainsString((string)($randomInput + 10), $output);
     }
 
-    public function testGrootsteVanDrie(): void
+    public function testOpdracht2_1Aftrekken(): void
     {
-        requireOpdracht(2, 'GrootsteVanDrie.php');
-        $this->assertSame(9, grootsteVanDrie(2, 9, 5));
-        $this->assertSame(2, grootsteVanDrie(2, 2, 1));
-        $this->assertSame(-1, grootsteVanDrie(-10, -1, -5));
+        $randomInput = rand(100, 999);
+        $cmd = "echo -e \"-\n$randomInput\n9\n\" | php " . escapeshellarg(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.1.php');
+        $output = shell_exec($cmd);
+        $this->assertStringContainsString((string)($randomInput - 9), $output);
     }
 
-    public function testBerekenKortingBedrag(): void
+    /**
+     * Opdracht 2.2 – Leeftijdscategorie
+     *
+     * Het script `opdrachten/opdracht-2.2.php` vraagt naar een leeftijd en
+     * print afhankelijk van de waarde een categorie (bijv. "kind", "tiener", "volwassene").
+     */
+    public function testOpdracht2_2LeeftijdOnder12(): void
     {
-        requireOpdracht(2, 'BerekenKorting.php');
-        $this->assertSame(0, berekenKortingBedrag(1000, false));
-        $this->assertSame(100, berekenKortingBedrag(1000, true));
-        $this->assertSame(99, berekenKortingBedrag(999, true));
-        $this->assertSame(0, berekenKortingBedrag(0, true));
+        $output = shell_exec('echo -e "8\n" | php ' . escapeshellarg(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.2.php'));
+        $this->assertStringContainsStringIgnoringCase('kind', $output);
     }
 
-    public function testFizzBuzz(): void
+    public function testOpdracht2_2LeeftijdTussen12En17(): void
     {
-        requireOpdracht(2, 'FizzBuzz.php');
-        $this->assertSame('1', fizzBuzz(1));
-        $this->assertSame('Fizz', fizzBuzz(3));
-        $this->assertSame('Buzz', fizzBuzz(5));
-        $this->assertSame('FizzBuzz', fizzBuzz(15));
-        $this->assertSame('FizzBuzz', fizzBuzz(30));
+        $output = shell_exec('echo -e "15\n" | php ' . escapeshellarg(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.2.php'));
+        $this->assertStringContainsStringIgnoringCase('tiener', $output);
     }
 
-    public function testVerzendkosten(): void
+    public function testOpdracht2_2Leeftijd18OfOuder(): void
     {
-        requireOpdracht(2, 'Verzendkosten.php');
-        $this->assertSame(495, verzendkosten(0));
-        $this->assertSame(495, verzendkosten(4999));
-        $this->assertSame(0, verzendkosten(5000));
-        $this->assertSame(0, verzendkosten(999999));
+        $output = shell_exec('echo -e "25\n" | php ' . escapeshellarg(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.2.php'));
+        $this->assertStringContainsStringIgnoringCase('volwassene', $output);
+    }
+
+    /**
+     * Opdracht 2.3 – Type inspectie
+     *
+     * Het script `opdrachten/opdracht-2.3.php` gebruikt `var_dump` op
+     * ten minste één string en één integer.
+     */
+    public function testOpdracht2_3PrintStringEnIntegerTypes(): void
+    {
+        include_once(getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.3.php');
+        $this->expectOutputRegex('/string\(/');
+        $this->expectOutputRegex('/int\(/');
+    }
+
+    public function testOpdracht2_3GebruiktVarDump(): void
+    {
+        $output = shell_exec('php -w ' . getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.3.php');
+        $this->assertStringContainsString('var_dump(', $output);
+    }
+
+    /**
+     * Opdracht 2.4 – Entreeticket
+     *
+     * Het script `opdrachten/opdracht-2.4.php` vraagt naar de leeftijd
+     * en bepaalt met if/else of iemand gratis, met korting of volledig betaalt.
+     */
+    public function testOpdracht2_4KindOnder12KrijgtGratis(): void
+    {
+        $output = shell_exec('echo -e "10\n" | php ' . getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.4.php');
+        $this->assertStringContainsStringIgnoringCase('gratis', $output);
+    }
+
+    public function testOpdracht2_4TienerKrijgtKorting(): void
+    {
+        $output = shell_exec('echo -e "15\n" | php ' . getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.4.php');
+        $this->assertStringContainsStringIgnoringCase('korting', $output);
+    }
+
+    public function testOpdracht2_4VolwasseneBetaaltVolledig(): void
+    {
+        $output = shell_exec('echo -e "30\n" | php ' . getenv('SOURCE_DIR') . 'level2/opdrachten/opdracht-2.4.php');
+        $this->assertStringContainsStringIgnoringCase('volledig', $output);
     }
 }
-
