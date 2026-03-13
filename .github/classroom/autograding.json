@@ -1,0 +1,54 @@
+{
+    "tests": [
+      {
+        "name": "Week 1: Level1 tests",
+        "setup": "composer install --no-interaction",
+        "run": "vendor/bin/phpunit level1/tests/Level1Test.php",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 60,
+        "points": 1
+      },
+      {
+        "name": "Week 2: Level2 tests",
+        "setup": "composer install --no-interaction",
+        "run": "vendor/bin/phpunit level2/tests/Level2Test.php",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 60,
+        "points": 1
+      },
+      {
+        "name": "Week 3: Level3 tests",
+        "setup": "composer install --no-interaction",
+        "run": "vendor/bin/phpunit level3/tests/Level3Test.php",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 60,
+        "points": 1
+      },
+      {
+        "name": "Week 4: Level4 tests",
+        "setup": "composer install --no-interaction",
+        "run": "vendor/bin/phpunit level4/tests/Level4Test.php",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 60,
+        "points": 1
+      },
+      {
+        "name": "Week 5: Level5 tests",
+        "setup": "composer install --no-interaction",
+        "run": "vendor/bin/phpunit level5/tests/Level5Test.php",
+        "input": "",
+        "output": "",
+        "comparison": "included",
+        "timeout": 60,
+        "points": 1
+      }
+    ]
+  }
